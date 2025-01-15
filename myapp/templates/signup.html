@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block titulo %} Editar producto {% endblock %}
+
+{% block contenido %}
+{{error}}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-5  offset-md-4">
+            <form action="/signup/" method="POST" class="card card-body">
+                {% csrf_token %}
+                <h2 class="text-center">CREA TU USUARIO</h2>
+                {{error}}
+                <div class="mb-3">
+                    <label for="cedula">Cédula</label>
+                    <input type="number" name="cedula" id="cedula" 
+                           class="form-control" placeholder="Digite su cédula">
+                </div>
+                <div class="mb-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="nombre" id="nombre" 
+                           class="form-control" placeholder="Digite su nombre">
+                </div>
+                <div class="mb-3">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" name="apellido" id="apellido" 
+                           class="form-control" placeholder="Digite su apellido">
+                </div>
+                <div class="mb-3">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" name="email" id="email" 
+                           class="form-control" placeholder="Digite su correo electrónico">
+                </div>
+                <div class="mb-3">
+                    <label for="telefono">Teléfono</label>
+                    <input type="number" name="telefono" id="telefono" 
+                           class="form-control" placeholder="Digite su número de teléfono (opcional)">
+                </div>
+                <div class="mb-3">
+                    <label for="direccion">Dirección</label>
+                    <textarea name="direccion" id="direccion" 
+                              class="form-control" placeholder="Digite su dirección (opcional)"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username"
+                    class="form-control" placehoder="Digite de nombre de usuario">
+                </div>
+                <div class="mb-3">
+                    <label for="password1">Contraseña</label>
+                    <input type="password" name="password1" id="password1"
+                    class="form-control" placehoder="Digite su contraseña">
+                </div>
+                <div class="mb-3">
+                    <label for="password2">Repita contraseña</label>
+                    <input type="password" name="password2" id="password2"
+                    class="form-control" placehoder="Digite su contraseña nuevamente">
+                </div>
+                <button class="btn btn-primary">
+                    Crear usuario
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+</main>
+{% endblock %}

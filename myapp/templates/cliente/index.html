@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block titulo %} {% endblock %}
+
+{% block contenido %}
+
+<div class="card">
+    <div class="card-header">
+        <a name="" id="" class="btn btn-success" href="{% url 'crear_cliente' %}" role="button">NUEVO CLIENTE</a>
+        <!-- Botón para abrir el modal de nuevo usuario -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoUsuario">
+            AGREGAR USUARIO
+        </button>
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Clientes y usuarios</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Cedula</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th>Direccion</th>
+                        <th>Rol</th>
+                        <th>Nombre de usuario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr class="">
+                        <td>{{ producto.cedula }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.apellido }}</td>
+                        <td>{{ producto.email }}</td>
+                        <td>{{ producto.telefono }}</td>
+                        <td>{{ producto.direccion }}</td>
+                        <td>{{ producto.rol }}</td>
+                        <td>{{ producto.username }}</td>
+                        <td>
+                            <a name="" id="" class="btn btn-info" href="{% url 'editar_cliente' producto.cedula %}" role="button">Editar</a> |
+                            <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_cliente' producto.cedula %}" role="button">Eliminar</a> |
+                            <!-- Botón para abrir el modal de modificar usuario -->
+                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalModificarUser{{ producto.cedula }}">
+                                User
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer text-muted"></div>
+</div>
+
+<!-- Modal para agregar un nuevo usuario -->
+<div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-labelledby="modalNuevoUsuarioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevoUsuarioLabel">Agregar Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para crear un nuevo usuario con solo username y password -->
+                <form action="{% url 'crear_usuario' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para modificar usuarios -->
+{% for producto in productos %}
+<div class="modal fade" id="modalModificarUser{{ producto.cedula }}" tabindex="-1" aria-labelledby="modalModificarUserLabel{{ producto.cedula }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarUserLabel{{ producto.cedula }}">Modificar Usuario - {{ producto.username }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario para modificar solo el username y password -->
+                <form action="{% url 'modificaruser' producto.cedula %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ producto.username }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Nueva contraseña">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

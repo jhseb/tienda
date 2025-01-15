@@ -1,0 +1,16 @@
+Bienvenido a tareas
+{% for task in tasks %}
+    <h1>{{task.title}}</h1>
+    
+
+    {% if task.done == False %}
+        <p>Tarea pendiente</p>
+    {% else %}
+        <p>Tarea realizada</p>
+    
+    {% endif %}
+    <h2>{{task.project.name}}</h2>
+    <button>update</button>
+    <button>delete</button>
+
+{% endfor %}

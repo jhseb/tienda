@@ -1,0 +1,40 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Tienda Online{% endblock %}
+
+{% block contenido %}
+<div class="container my-5">
+    <!-- Encabezado con botón -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-4">Catálogo de Productos:Agrega AHORA</h1>
+        <!--<a name="" id="" class="btn btn-success btn-lg" href="{% url 'crear_producto' %}" role="button">+ Nuevo Producto</a>-->
+    </div>
+
+    <!-- Sección de productos -->
+    <div class="row">
+        {% for producto in productos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.titulo }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.titulo }}</h5>
+                    <p class="card-text">{{ producto.descripcion }}</p>
+                    <p class="card-text">{{ producto.precio }}</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a class="btn btn-info btn-sm me-2" href="{% url 'crearcarrito' user.username producto.id %}" role="button">AGREGAR</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Mensaje si no hay productos -->
+    {% if productos|length == 0 %}
+    <div class="alert alert-warning text-center" role="alert">
+        No hay productos disponibles. ¡Crea el primero ahora!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
