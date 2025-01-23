@@ -25,7 +25,7 @@
                         <th>Cantidad</th>
                         <th>Imagen</th>
                         <th>Descripcion</th>
-                        <th>Precio</th>
+                        <th>Precio uni</th>
                         <th>Estado compra</th>
                     </tr>
                 </thead>
@@ -38,7 +38,7 @@
                             <td>{{ producto.id }}</td>
                             <td>{{ producto1.titulo }}</td>
                             <td>{{ producto1.marca }}</td>
-                            <td>1</td>
+                            <td>{{ producto.car_cantidad }}</td>
                             <td>
                                 <img src="{{ producto1.imagen.url }}" height="100"/>
                     

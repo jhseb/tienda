@@ -62,12 +62,18 @@ def obtener_cliente(request):
 
 def inicio(request):
     cliente0 = obtener_cliente(request)
-    return render(request, 'inicio.html',{'cliente':  cliente0} )
-    return render(request, 'Producto/productostienda.html',{'cliente':  cliente0} )
+    productos = producto.objects.all()
+    return render(request, 'inicio.html',{'productos':productos,'cliente':cliente0})
 
 def hello(request, username):
     print(username)
     return HttpResponse("<h1>hola %s</h1>"% username)
+
+def buscar_cantidad(request):
+    cliente0 = obtener_cliente(request)
+    car = carrito.objects.filter(cedula=cliente0.cedula, estado="por comprar")
+    resultados = len(car)
+    return resultados
 
 def about(request):
     return render(request,'about.html')
@@ -211,9 +217,10 @@ def productostienda(request):
 
 @user_passes_test(is_usuario, login_url='denied_access')
 def agregarcarrito(request):
+    cantidad_car = buscar_cantidad(request)
     cliente0 = obtener_cliente(request)
     productos = producto.objects.all()
-    return render(request, 'Producto/agregarcarrito.html',{'productos':productos,'cliente':cliente0})
+    return render(request, 'Producto/agregarcarrito.html',{'productos':productos,'cliente':cliente0,'cantidad_car':cantidad_car})
 
 def productosgenerales(request):
     cliente0 = obtener_cliente(request)
@@ -266,6 +273,7 @@ def cantidadproducto(request,username,id):
 @user_passes_test(is_usuario, login_url='denied_access')
 def mostrarcarrito(request, username):
     cliente0 = obtener_cliente(request)
+    cantidad_car = buscar_cantidad(request)
     try:
         cliente1 = cliente.objects.get(username=username)
     except cliente.DoesNotExist:
@@ -292,7 +300,7 @@ def mostrarcarrito(request, username):
                 print(f"Producto con id {iteracion} no encontrado.")
 
     return render(request, 'Producto/carrito.html', {
-        'productos': productos,'productos1': productos1 ,'cliente':cliente0,'total': total
+        'productos': productos,'productos1': productos1 ,'cliente':cliente0,'total': total,'cantidad_car':cantidad_car
     })
 
 @user_passes_test(is_admin, login_url='denied_access')   
@@ -307,6 +315,7 @@ def comprastotales(request):
 
 @user_passes_test(is_usuario, login_url='denied_access')
 def mostrarcompra(request, username):
+    cantidad_car = buscar_cantidad(request)
     cliente0 = obtener_cliente(request)
     try:
         cliente1 = cliente.objects.get(username=username)
@@ -326,7 +335,7 @@ def mostrarcompra(request, username):
     
     total=0
     return render(request, 'Producto/mostrarcompra.html', {
-        'productos': productos,'productos1': productos1 ,'cliente':cliente0,'total': total
+        'productos': productos,'productos1': productos1 ,'cliente':cliente0,'total': total,'cantidad_car':cantidad_car
     })
 
 

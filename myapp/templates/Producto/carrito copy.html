@@ -8,42 +8,55 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Productos que vas a comprar</h4>
-        <div class="row">
-            {% for producto1 in productos1 %}
-                {% for producto in productos %}
-                    {% if producto.idproducto == producto1.id %}
-                        <div class="col-md-3 mb-4"> <!-- Cambié col-md-4 a col-md-3 para que ocupe menos espacio -->
-                            <div class="card shadow-sm">
-                                <!-- Aquí se ha añadido el ajuste para que la imagen no se estire -->
-                                <img src="{{ producto1.imagen.url }}" class="card-img-top" style="object-fit: contain; width: 100%; height: 150px;" />
-                                <div class="card-body">
-                                    <h5 class="card-title" style="font-size: 1rem;">{{ producto1.titulo }}</h5> <!-- Ajusté el tamaño de la fuente -->
-                                    <p class="card-text" style="font-size: 0.85rem;"><strong>Marca:</strong> {{ producto1.marca }}</p> <!-- Ajusté el tamaño de la fuente -->
-                                    <p class="card-text" style="font-size: 0.85rem;"><strong>Descripción:</strong> {{ producto1.descripcion }}</p> <!-- Ajusté el tamaño de la fuente -->
-                                    <p class="card-text" style="font-size: 0.85rem;"><strong>Precio uni:</strong> ${{ producto1.precio }}</p> <!-- Ajusté el tamaño de la fuente -->
-                                    <p class="card-text" style="font-size: 0.85rem;"><strong>Cantidad:</strong> {{ producto.car_cantidad }}</p> <!-- Ajusté el tamaño de la fuente -->
-                                    <p class="card-text" style="font-size: 0.85rem;"><strong>Estado:</strong> {{ producto.estado }}</p> <!-- Ajusté el tamaño de la fuente -->
-
-                                    <div class="d-flex justify-content-between">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="table-danger">
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Marca</th>
+                        <th>Cantidad</th>
+                        <th>Imagen</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto1 in productos1 %}
+                        {% for producto in productos %}
+                            <tr>
+                                {% if producto.idproducto == producto1.id %}
+                                    <td>{{ producto.id }}</td>
+                                    <td>{{ producto1.titulo }}</td>
+                                    <td>{{ producto1.marca }}</td>
+                                    <td>{{ producto.car_cantidad }}</td>
+                                    <td>
+                                        <img src="{{ producto1.imagen.url }}" height="100"/>
+                                    </td>
+                                    <td>{{ producto1.descripcion }}</td>
+                                    <td>{{ producto1.precio }}</td>
+                                    <td>{{ producto.estado }}</td>
+                                    <td>
                                         <!-- Botón para abrir el modal de agregar producto -->
-                                        <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#agregarModal{{ producto.id }}">Agregar</button> <!-- Cambié el tamaño del botón -->
+                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarModal{{ producto.id }}">Agregar</button>
                                         
                                         <!-- Botón para abrir el modal de restar producto -->
-                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#restarModal{{ producto.id }}">Restar</button> <!-- Cambié el tamaño del botón -->
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#restarModal{{ producto.id }}">Restar</button>
                                         
-                                        <!-- Botón para eliminar producto -->
-                                        <a name="" id="" class="btn btn-sm btn-danger" href="{% url 'eliminarcarrito' user.username producto.id %}" role="button">Eliminar</a> <!-- Cambié el tamaño del botón -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
+                                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminarcarrito' user.username producto.id %}" role="button">Eliminar</a>
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         <div style="display: flex; justify-content: flex-end; align-items: center;">
-            <p style="margin: 0; padding-right: 10px; font-size: 1rem;"><strong>Total: </strong>${{ total }}</p> <!-- Ajusté el tamaño del texto -->
-            <a href="{% url 'compra' user.username %}" class="btn btn-sm btn-primary">Generar compra</a> <!-- Cambié el tamaño del botón -->
+            <p style="margin: 0; padding-right: 10px;"><strong>Total: </strong>${{ total }}</p>
+            <a href="{% url 'compra' user.username %}" class="btn btn-primary">Generar compra</a>
         </div>
     </div>
     <div class="card-footer text-muted"></div>
@@ -76,8 +89,8 @@
                                 </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button> <!-- Cambié el tamaño del botón -->
-                            <button type="submit" class="btn btn-sm btn-success">Confirmar</button> <!-- Cambié el tamaño del botón -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Confirmar</button>
                         </div>
                             </form>
                     </div>
@@ -108,8 +121,8 @@
                                 </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Cancelar</button> <!-- Cambié el tamaño del botón -->
-                            <button type="submit" class="btn btn-sm btn-warning">Confirmar</button> <!-- Cambié el tamaño del botón -->
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-warning">Confirmar</button>
                         </div>
                             </form>
                     </div>
@@ -120,4 +133,3 @@
 {% endfor %}
 
 {% endblock %}
-

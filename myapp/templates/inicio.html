@@ -4,21 +4,49 @@
 
 {% block contenido %}
 
-<div class="p-0 mb-4 bg-light bg-gradient rounded-3 shadow-lg" style="position: relative; overflow: hidden;">
+<!-- Texto Tienda Electrónica centrado arriba del carrusel -->
+<div class="container text-center" style="position: relative; margin-bottom: -50px; z-index: 2;">
+    <h2 class="text-primary">TIENDA DE ELECTRODOMESTICOS BOGOTA</h2></br></br>
+</div>
 
-    <video autoplay muted loop class="w-100" style="height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
-        <source src="../static/videos/fondo.mp4" type="video/mp4">
-        Tu navegador no soporta el formato de video.
-    </video>
+<div class="p-0 mb-4 bg-light bg-gradient rounded-3 shadow-lg" style="position: relative; overflow: hidden; height: 400px;">
+    <!-- Carrusel de imágenes -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            {% for producto in productos %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="d-flex align-items-start" style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+                        <div>
+                            <h3 style="color: blue;">{{ producto.titulo }}</h3>
+                            <p style="color: blue;">{{ producto.precio }}</p>
+                        </div>
+                    </div>
+                    <img src="{{ producto.imagen.url }}" class="d-block w-100" alt="{{ producto.nombre }}" style="height: 400px; object-fit: contain;">
 
-    <div class="container-fluid py-5 text-center" style="position: relative; z-index: 1;">
-        <h1 class="display-4 fw-bold mb-4" style="color: yellow;">COMPRA AHORA</h1>
-        <p class="col-md-8 mx-auto fs-5 text-white mb-4">
-            Encuentra los productos que necesitas para toda la familia, combinando calidad, estilo y precios competitivos.
-        </p>
-        <a href="{% url 'productosgenerales' %}" class="btn btn-danger btn-lg px-5 py-3 rounded-pill shadow">
-            Explorar Productos
-        </a>
+                    <!-- Botón dentro del carrusel -->
+                    <div class="position-absolute" style="bottom: 20px; right: 20px; z-index: 2;">
+                        <a href="{% url 'signup' %}" class="btn btn-danger btn-lg px-5 py-3 rounded-pill shadow">
+                            Compra ahora
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Flechas del carrusel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" style="left: 10px;">
+            <span class="carousel-control-prev-icon" aria-hidden="true" style="font-size: 2rem; color: white; background-color: rgba(0, 0, 0, 0.5); border-radius: 50%; padding: 10px;"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" style="right: 10px;">
+            <span class="carousel-control-next-icon" aria-hidden="true" style="font-size: 2rem; color: white; background-color: rgba(0, 0, 0, 0.5); border-radius: 50%; padding: 10px;"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 </div>
 
@@ -58,3 +86,19 @@
 </div>
 
 {% endblock %}
+
+<style>
+    /* Efecto hover para las flechas */
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+        background-color: rgba(255, 255, 255, 0.7); /* Fondo blanco semi-transparente al hacer hover */
+        color: black; /* Cambiar color de las flechas al pasar el cursor */
+    }
+
+    /* Estilo para el texto Tienda Electrónica */
+    .container h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #007bff;
+        margin-top: 50px;
+    }
+</style>
