@@ -5,26 +5,25 @@
 {{error}}
 <main class="container">
     <div class="row">
-        <div class="col-md-5  offset-md-4">
+        <div class="col-md-5 offset-md-4 mt-5">
             <form action="/signin/" method="POST" class="card card-body">
                 {% csrf_token %}
                 <h2 class="text-center">Inicia Sesion</h2>
                 <div class="mb-3">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username"
-                    class="form-control" placehoder="Digite de nombre de usuario">
+                    class="form-control" placeholder="Digite de nombre de usuario">
                 </div>
                 <div class="mb-3">
                     <label for="password1">Contraseña</label>
                     <input type="password" name="password" id="password"
-                    class="form-control" placehoder="Digite su contraseña">
+                    class="form-control" placeholder="Digite su contraseña">
                 </div>
                 <button class="btn btn-primary">
                     Iniciar sesión
                 </button>
             </form>
         </div>
-
     </div>
 </main>
 {% endblock %}

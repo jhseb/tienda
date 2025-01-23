@@ -1,40 +1,98 @@
-
 {% extends "base.html" %}
-
+{% load custom_filters %}
 {% block titulo %}Tienda Online{% endblock %}
 
 {% block contenido %}
-<div class="container my-5">
-    <!-- Encabezado con botón -->
+<div class="container my-9">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="display-4">Catálogo de Productos:Agrega AHORA</h1>
-        <!--<a name="" id="" class="btn btn-success btn-lg" href="{% url 'crear_producto' %}" role="button">+ Nuevo Producto</a>-->
+        <h1 class="display-10 text-primary fw-bold">Catálogo de Productos: ¡Agrega AHORA!</h1>
     </div>
 
-    <!-- Sección de productos -->
+    {{ error }}
+
     <div class="row">
         {% for producto in productos %}
         <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.titulo }}">
+            <div class="card shadow-lg border-light rounded-3 h-100">
+                <img src="{{ producto.imagen.url }}" class="card-img-top imagen-producto" alt="{{ producto.titulo }}">
                 <div class="card-body">
-                    <h5 class="card-title">{{ producto.titulo }}</h5>
-                    <p class="card-text">{{ producto.descripcion }}</p>
-                    <p class="card-text">{{ producto.precio }}</p>
+                    <h5 class="card-title text-center text-success">{{ producto.titulo }}: {{ producto.descripcion }}</h5>
+                    <p class="card-text">{{ producto.cantidad }} disponibles</p>
+                    <p class="card-text" style="color: blue; font-weight: bold;">${{ producto.precio }}</p>
                 </div>
                 <div class="card-footer text-center">
-                    <a class="btn btn-info btn-sm me-2" href="{% url 'crearcarrito' user.username producto.id %}" role="button">AGREGAR</a>
+                    <!-- Botón para abrir el modal -->
+                    <button class="btn btn-primary btn-sm me-2 px-4" data-bs-toggle="modal" data-bs-target="#modalAgregar{{ producto.id }}" role="button">AGREGAR</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para seleccionar la cantidad de productos -->
+        <div class="modal fade" id="modalAgregar{{ producto.id }}" tabindex="-1" aria-labelledby="modalAgregarLabel{{ producto.id }}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalAgregarLabel{{ producto.id }}">Selecciona la cantidad de {{ producto.titulo }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{% url 'crearcarrito' user.username producto.id %}" method="POST">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <select name="cantidad" id="cantidad" class="form-select">
+                                    {% for i in producto.cantidad|range_filter %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Agregar al carrito</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
 
-    <!-- Mensaje si no hay productos -->
     {% if productos|length == 0 %}
-    <div class="alert alert-warning text-center" role="alert">
+    <div class="alert alert-warning text-center shadow-sm" role="alert">
         No hay productos disponibles. ¡Crea el primero ahora!
     </div>
     {% endif %}
 </div>
+
+{% block styles %}
+<style>
+    .imagen-producto {
+        width: 100%;
+        height: 300px;
+        object-fit: cover; 
+    }
+    .card {
+        border-radius: 12px;  
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<!--<script>
+    // Este script maneja el botón "AGREGAR" para cambiar el estado del botón.
+    document.querySelectorAll('.btn-primary').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();  
+            var productoId = button.id.replace('agregar', '');  
+
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-success'); 
+            button.innerHTML = '¡Producto agregado!';  
+
+            setTimeout(function() {
+                window.location.href = button.getAttribute('href'); 
+            }, 1500); 
+        });
+    });
+</script>-->
+{% endblock %}
+
 {% endblock %}

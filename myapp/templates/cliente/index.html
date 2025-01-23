@@ -9,7 +9,7 @@
         <a name="" id="" class="btn btn-success" href="{% url 'crear_cliente' %}" role="button">NUEVO CLIENTE</a>
         <!-- Botón para abrir el modal de nuevo usuario -->
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoUsuario">
-            AGREGAR USUARIO
+            AGREGAR PERMISOS
         </button>
     </div>
     <div class="card-body">
@@ -17,7 +17,7 @@
         <div class="table-responsive">
             <table class="table">
                 <thead>
-                    <tr>
+                    <tr class="table-warning">
                         <th>Cedula</th>
                         <th>Nombre</th>
                         <th>Apellido</th>
@@ -43,7 +43,6 @@
                         <td>
                             <a name="" id="" class="btn btn-info" href="{% url 'editar_cliente' producto.cedula %}" role="button">Editar</a> |
                             <a name="" id="" class="btn btn-danger" href="{% url 'eliminar_cliente' producto.cedula %}" role="button">Eliminar</a> |
-                            <!-- Botón para abrir el modal de modificar usuario -->
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalModificarUser{{ producto.cedula }}">
                                 User
                             </button>
@@ -57,7 +56,6 @@
     <div class="card-footer text-muted"></div>
 </div>
 
-<!-- Modal para agregar un nuevo usuario -->
 <div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-labelledby="modalNuevoUsuarioLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -66,7 +64,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Formulario para crear un nuevo usuario con solo username y password -->
+ 
                 <form action="{% url 'crear_usuario' %}" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -84,7 +82,7 @@
     </div>
 </div>
 
-<!-- Modal para modificar usuarios -->
+
 {% for producto in productos %}
 <div class="modal fade" id="modalModificarUser{{ producto.cedula }}" tabindex="-1" aria-labelledby="modalModificarUserLabel{{ producto.cedula }}" aria-hidden="true">
     <div class="modal-dialog">
@@ -94,7 +92,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Formulario para modificar solo el username y password -->
                 <form action="{% url 'modificaruser' producto.cedula %}" method="POST">
                     {% csrf_token %}
                     <div class="mb-3">

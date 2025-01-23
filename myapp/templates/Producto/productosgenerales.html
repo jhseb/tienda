@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+    Tienda Online
+{% endblock %}
+
+{% block contenido %}
+    <div class="container-fluid" style="background-color: white; border-radius: 40px; overflow: hidden;">
+        <div class="container my-12">
+            <div class="d-flex justify-content-center align-items-center mb-4">
+                <h4 class="display-6 text-danger fw-bold text-center">CATALOGO PRODUCTOS</h4>
+            </div>
+
+            {{ error }}
+
+            <div id="productoCarousel" class="carousel slide" data-bs-ride="carousel" style="padding: 15px; border-radius: 15px; overflow: hidden;">
+                <div class="carousel-inner" >
+                    {% for producto in productos %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ producto.imagen.url }}" class="d-block w-50 mx-auto imagen-con-fondo" alt="{{ producto.titulo }}" style="border-radius: 10px;">
+                            <div class="carousel-caption d-none d-md-block" style="text-align: left; padding-left: 15px;">
+                                <h6 class="text-primary" style="font-size: 1.5rem;">{{ producto.titulo }}</h6>
+                                <p class="text-muted" style="font-size: 1rem;">{{ producto.descripcion }}</p>
+                                <p style="color: blue; font-weight: bold; font-size: 1.2rem;">${{ producto.precio }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <button class="carousel-control-prev btn-sm" type="button" data-bs-target="#productoCarousel" data-bs-slide="prev" style="z-index: 10; background-color: #5bc0de; border-radius: 50%; padding: 3px; width: 100px; height: 100px;">
+                    <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                
+                <button class="carousel-control-next btn-sm" type="button" data-bs-target="#productoCarousel" data-bs-slide="next" style="z-index: 10; background-color: #5bc0de; border-radius: 50%; padding: 3px; width: 100px; height: 100px;">
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1);"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            {% if productos|length == 0 %}
+                <div class="alert alert-warning text-center shadow-sm" role="alert" style="border-radius: 10px;">
+                    No hay productos disponibles. ¡Crea el primero ahora!
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+{% block styles %}
+    <style>
+        body {
+        background-image: url('../static/imagenes/fondo 3.jpg'); 
+        background-size: cover; 
+        background-position: center;
+        background-repeat: no-repeat; 
+        }
+
+        .carousel-inner {
+            background-color: white;
+            border-radius: 15px;
+        }
+
+        .carousel-item {
+            background-color: white;  
+            border-radius: 15px;
+        }
+
+        #productoCarousel .carousel-item img {
+            width: 100%;            
+            height: 400px;            
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            border-radius: 50%;
+        }
+    </style>
+{% endblock %}
+
+{% endblock %}

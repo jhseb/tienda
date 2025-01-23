@@ -1,0 +1,23 @@
+/* Establecer el video como fondo */
+.video-background {
+    position: fixed; /* Fijamos el video para que cubra toda la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Aseguramos que el video cubra toda la pantalla */
+    z-index: -1; /* Aseguramos que el video esté detrás del contenido */
+}
+
+/* Asegurarse de que el formulario quede por encima del video */
+.position-relative {
+    position: relative;
+    z-index: 1;
+}
+
+/* Estilo del contenedor del formulario */
+.card-body {
+    background: rgba(255, 255, 255, 0.8); /* Fondo semi-transparente para mejor legibilidad */
+    padding: 2rem;
+    border-radius: 10px;
+}

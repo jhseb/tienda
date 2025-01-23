@@ -1,13 +1,36 @@
 from django.db import models # type: ignore
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User, Group
 
 # Create your models here.
-        
+
+
+
+class producto(models.Model):
+    id = models.AutoField(primary_key=True)
+    titulo = models.CharField(max_length=100, verbose_name='título producto')
+    imagen = models.ImageField(upload_to='myapp/static/imagenes/', verbose_name='imagen producto', null=True)
+    descripcion = models.TextField(verbose_name='descripción producto', null=True)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='precio producto')
+    cantidad = models.IntegerField(default=0, verbose_name='cantidad producto') 
+    marca = models.CharField(max_length=50, verbose_name='marca producto', null=True, blank=True)  
+
+    def __str__(self):
+        fila = f"Nombre del producto: {self.titulo}____Descripción: {self.descripcion}____Marca: {self.marca}____Cantidad: {self.cantidad}"
+        return fila
+
+    def delete(self, using=None, keep_parents=False):
+        self.imagen.storage.delete(self.imagen.name)
+        super().delete()
+
+""""      
 class producto(models.Model):
     id =models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=100, verbose_name='titulo producto')
     imagen = models.ImageField(upload_to='myapp/static/imagenes/',verbose_name='imagen producto',null=True)
     descripcion=models.TextField(verbose_name='descripcion producto',null=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='precio producto')
+    
     
     def __str__(self):
         fila ="Nombre del producto"+ self.titulo + "____" + "Descripción:"+self.descripcion
@@ -16,7 +39,7 @@ class producto(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.imagen.storage.delete(self.imagen.name)
         super().delete()
-
+"""
 class cliente(models.Model):
     cedula = models.IntegerField(max_length=20, primary_key=True, verbose_name="Cédula")
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
@@ -28,10 +51,13 @@ class cliente(models.Model):
     username = models.CharField(max_length=50, unique=True, verbose_name="Nombre de Usuario")
 
 class carrito(models.Model):
-    id =models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     idproducto = models.IntegerField()
     precio = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Precio")
-    cedula = models.ForeignKey(cliente, on_delete=models.CASCADE, verbose_name="Cliente")
+    cedula = models.ForeignKey('cliente', on_delete=models.CASCADE, verbose_name="Cliente")
+    estado = models.CharField(max_length=20, default="por comprar", verbose_name="Estado")
+    car_cantidad = models.IntegerField(verbose_name="Cantidad")
+
 
 """
 

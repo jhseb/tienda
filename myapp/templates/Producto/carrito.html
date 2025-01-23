@@ -1,63 +1,135 @@
 {% extends "base.html" %}
+{% load custom_filters %}
 
 {% block titulo %} {% endblock %}
 
 {% block contenido %}
 
 <div class="card">
-    <!--<div class="card-header">
-        <a name="" id="" class="btn btn-success" href="{% url 'crear_producto' %}" role="button" >NUEVO PRODUCTO</a>
-        
-    </div>-->
     <div class="card-body">
         <h4 class="card-title">Productos que vas a comprar</h4>
-        <div
-            class="table-responsive"
-        >
-            <table
-                class="table"
-            >
-                <thead>
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="table-danger">
                     <tr>
                         <th>ID</th>
-                        <th>Titulo</th>
+                        <th>Título</th>
+                        <th>Marca</th>
+                        <th>Cantidad</th>
                         <th>Imagen</th>
-                        <th>Descripcion</th>
+                        <th>Descripción</th>
                         <th>Precio</th>
+                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for producto1 in productos1 %}
                         {% for producto in productos %}
-                        
-                        <tr class="">
-                            {% if producto.idproducto == producto1.id %}
-                            <td>{{ producto.id }}</td>
-                            <td>{{ producto1.titulo }}</td>
-                            <td>
-                                <img src="{{ producto1.imagen.url }}" height="100"/>
-                    
-                            </td>
-                            <td>{{ producto1.descripcion }}</td>
-                            <td>{{ producto1.precio }}</td>
-                            <td>
-                                <a name="" id="" class="btn btn-danger" href="{% url 'eliminarcarrito' user.username producto.id %}" role="button">Eliminar</a>
-                            </td>
-                        </tr>
-                        {% endif %}
+                            <tr>
+                                {% if producto.idproducto == producto1.id %}
+                                    <td>{{ producto.id }}</td>
+                                    <td>{{ producto1.titulo }}</td>
+                                    <td>{{ producto1.marca }}</td>
+                                    <td>{{ producto.car_cantidad }}</td>
+                                    <td>
+                                        <img src="{{ producto1.imagen.url }}" height="100"/>
+                                    </td>
+                                    <td>{{ producto1.descripcion }}</td>
+                                    <td>{{ producto1.precio }}</td>
+                                    <td>{{ producto.estado }}</td>
+                                    <td>
+                                        <!-- Botón para abrir el modal de agregar producto -->
+                                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarModal{{ producto.id }}">Agregar</button>
+                                        
+                                        <!-- Botón para abrir el modal de restar producto -->
+                                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#restarModal{{ producto.id }}">Restar</button>
+                                        
+                                        <a name="" id="" class="btn btn-danger" href="{% url 'eliminarcarrito' user.username producto.id %}" role="button">Eliminar</a>
+                                    </td>
+                                {% endif %}
+                            </tr>
                         {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-                       
-
-        
+        <div style="display: flex; justify-content: flex-end; align-items: center;">
+            <p style="margin: 0; padding-right: 10px;"><strong>Total: </strong>${{ total }}</p>
+            <a href="{% url 'compra' user.username %}" class="btn btn-primary">Generar compra</a>
+        </div>
     </div>
     <div class="card-footer text-muted"></div>
-
-
 </div>
+
+<!-- Modal de Agregar Producto -->
+{% for producto1 in productos1 %}
+    {% for producto in productos %}
+        {% if producto.idproducto == producto1.id %}
+            <div class="modal fade" id="agregarModal{{ producto.id }}" tabindex="-1" aria-labelledby="agregarModalLabel{{ producto.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarModalLabel{{ producto.id }}">Agregar al carrito</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas agregar el producto "{{ producto1.titulo }}" al carrito de compras?
+                            <br>
+                            <!-- Formulario de cantidad dentro del modal -->
+                            <form method="POST" action="{% url 'sumarcarrito' user.username producto.id %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="cantidadModal{{ producto.id }}" class="form-label">Cantidad:</label>
+                                    <select class="form-select" id="cantidadModal{{ producto.id }}" name="cantidad" aria-label="Cantidad">
+                                        {% for i in producto1.cantidad|range_filter %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-success">Confirmar</button>
+                        </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Restar Producto -->
+            <div class="modal fade" id="restarModal{{ producto.id }}" tabindex="-1" aria-labelledby="restarModalLabel{{ producto.id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="restarModalLabel{{ producto.id }}">Restar del carrito</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ¿Estás seguro de que deseas restar el producto "{{ producto1.titulo }}" del carrito de compras?
+                            <br>
+                            <!-- Formulario de cantidad dentro del modal para restar -->
+                            <form method="POST" action="{% url 'restarcarrito' user.username producto.id %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="cantidadRestarModal{{ producto.id }}" class="form-label">Cantidad a restar:</label>
+                                    <select class="form-select" id="cantidadRestarModal{{ producto.id }}" name="cantidad" aria-label="Cantidad a restar">
+                                        {% for i in producto.car_cantidad|range_filter %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-warning">Confirmar</button>
+                        </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
 
 {% endblock %}
